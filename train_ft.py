@@ -17,6 +17,7 @@ from utils.dataset import LMMIterator
 from utils.helper import shift_tokens_right
 from utils.polynomial_lr_decay import PolynomialLRDecay
 
+# Setting up the device for training (GPU if available)
 device = 'cuda' if cuda.is_available() else 'cpu'
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -49,6 +50,7 @@ def evaluate(model, valid_loader, tokenizer, loss_fn, step):
 
 def main():
     parser = argparse.ArgumentParser()
+    # Adding arguments for various hyperparameters and settings
     parser.add_argument(
         '-seed', default=42, type=int, help='random seed')
     parser.add_argument(
@@ -83,7 +85,7 @@ def main():
     torch.manual_seed(opt.seed)
 
     model_path = "mbart-large-50"
-
+    # Loading the pre-trained model and tokenizer
     model = MBartForConditionalGeneration.from_pretrained(model_path)
     model = model.to(device).train()
     if opt.stage == 'sft':
